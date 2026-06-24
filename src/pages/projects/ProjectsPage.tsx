@@ -3,6 +3,7 @@ import { Card } from '../../components/ui/Card';
 import { TextField } from '../../components/ui/TextField';
 import { ProjectCard } from '../../components/projects/ProjectCard';
 import { LazyImage } from '../../components/ui/LazyImage';
+import { assetPath } from '../../utils/paths';
 const summaryCards = [
   { label: 'Total Projects', value: '24', supporting: 'All projects', icon: './svg/folder-light-purple.svg', bg: 'purple' as const, bgImage: './images/purplebg.png' },
   { label: 'In Progress', value: '12', supporting: 'Active development', icon: './svg/activity-light-blue.svg', bg: 'blue' as const, bgImage: './images/bluebg.png' },
@@ -124,7 +125,7 @@ function SummaryCard({ label, value, supporting, icon, bg, bgImage }: typeof sum
     'border-error-bg';
   return (
     <Card className={`flex-1 relative overflow-hidden ${borderClass}`}>
-      <img src={bgImage} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+      <img src={assetPath(bgImage)} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div className="relative flex items-center gap-4">
         <div className={`inline-flex shrink-0 items-center justify-center rounded-full h-12 w-12 ${
           bg === 'purple' ? 'bg-purple-1000' :

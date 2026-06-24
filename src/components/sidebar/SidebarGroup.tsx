@@ -26,7 +26,7 @@ export function SidebarGroup({ item, collapsed }: SidebarGroupProps) {
           className={`flex items-center justify-center px-2 py-3 mx-2 rounded text-sm transition-colors cursor-pointer ${
             isActive
               ? 'bg-blue-500/16 text-white'
-              : 'text-text-disabled hover:bg-surface-hover hover:text-blue-500'
+              : 'text-text-tertiary-2 hover:bg-surface-hover hover:text-blue-500'
           }`}
         >
           <LazyImage src={iconSrc} alt={item.label} className="h-5 w-5" />

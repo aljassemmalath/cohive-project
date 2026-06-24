@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -144,6 +144,8 @@ const statusIconMap: Record<string, ReactNode> = {
 export default function ProjectDetailsPage() {
   const { projectId = '' } = useParams();
   const project = projects[projectId as keyof typeof projects];
+  const tabs = ['Overview', 'Board', 'List', 'Timeline', 'Files', 'Decisions', 'Approvals', 'Members', 'Settings'];
+  const [activeTab, setActiveTab] = useState('Overview');
 
   if (!project) {
     return (
@@ -220,6 +222,27 @@ export default function ProjectDetailsPage() {
           </div>
         </div>
       </Card>
+      <div className="overflow-x-auto -mx-6 px-6">
+        <div className="flex gap-0 border-b border-border min-w-max">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`relative px-3 py-2 text-sm whitespace-nowrap transition-colors ${
+                activeTab === tab
+                  ? 'text-blue-500 font-medium'
+                  : 'text-text-tertiary-2'
+              }`}
+            >
+              {tab}
+              {activeTab === tab && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500" />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+      {activeTab === 'Overview' && (<>
       <div className="grid grid-cols-3 gap-5">
         <Card className="p-5">
           <div className="flex items-center gap-6">
@@ -423,6 +446,47 @@ export default function ProjectDetailsPage() {
           ))}
         </div>
       </Card>
+      </>)}
+      {activeTab === 'Board' && (
+        <Card className="p-8 flex items-center justify-center">
+          <p className="text-sm text-text-tertiary">Board view coming soon</p>
+        </Card>
+      )}
+      {activeTab === 'List' && (
+        <Card className="p-8 flex items-center justify-center">
+          <p className="text-sm text-text-tertiary">List view coming soon</p>
+        </Card>
+      )}
+      {activeTab === 'Timeline' && (
+        <Card className="p-8 flex items-center justify-center">
+          <p className="text-sm text-text-tertiary">Timeline view coming soon</p>
+        </Card>
+      )}
+      {activeTab === 'Files' && (
+        <Card className="p-8 flex items-center justify-center">
+          <p className="text-sm text-text-tertiary">Files view coming soon</p>
+        </Card>
+      )}
+      {activeTab === 'Decisions' && (
+        <Card className="p-8 flex items-center justify-center">
+          <p className="text-sm text-text-tertiary">Decisions view coming soon</p>
+        </Card>
+      )}
+      {activeTab === 'Approvals' && (
+        <Card className="p-8 flex items-center justify-center">
+          <p className="text-sm text-text-tertiary">Approvals view coming soon</p>
+        </Card>
+      )}
+      {activeTab === 'Members' && (
+        <Card className="p-8 flex items-center justify-center">
+          <p className="text-sm text-text-tertiary">Members view coming soon</p>
+        </Card>
+      )}
+      {activeTab === 'Settings' && (
+        <Card className="p-8 flex items-center justify-center">
+          <p className="text-sm text-text-tertiary">Settings view coming soon</p>
+        </Card>
+      )}
     </div>
   );
 }

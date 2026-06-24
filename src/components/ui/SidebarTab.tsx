@@ -20,7 +20,7 @@ export function SidebarTab({ label, icon, iconHover, iconActive, active, onClick
       className={`relative flex w-full items-center gap-3 rounded px-3 py-2.5 mx-3 text-sm transition-colors ${
         active
           ? 'bg-blue-500/16 text-text-primary'
-          : 'text-text-disabled hover:text-blue-500'
+          : 'text-text-tertiary-2 hover:text-blue-500'
       }`}
     >
       {active && (

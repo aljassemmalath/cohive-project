@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { assetPath } from '../../utils/paths';
 
 interface LazyImageProps {
   src: string;
@@ -18,7 +19,7 @@ export function LazyImage({ src, alt, className = '' }: LazyImageProps) {
         <span className="absolute inset-0 animate-pulse rounded bg-border-white-6" />
       )}
       <img
-        src={src}
+        src={assetPath(src)}
         alt={alt}
         className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-200`}
         onLoad={() => setLoaded(true)}

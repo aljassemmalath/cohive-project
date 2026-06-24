@@ -7,6 +7,7 @@ import { useAuth } from '../auth/hooks/useAuth';
 import { canAccess } from '../auth/utils/permissions';
 import { useIsDesktop } from '../hooks/useMediaQuery';
 import { LazyImage } from '../components/ui/LazyImage';
+import { assetPath } from '../utils/paths';
 
 function filterItems(user: ReturnType<typeof useAuth>['user']) {
   return (item: { roles?: string[]; permissions?: string[] }) => {
@@ -102,7 +103,7 @@ export function MainLayout() {
                               : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary'
                           }`}
                         >
-                          {item.icon && <img src={item.icon} alt="" className="h-5 w-5 shrink-0" />}
+                          {item.icon && <img src={assetPath(item.icon)} alt="" className="h-5 w-5 shrink-0" />}
                           {item.label}
                         </Link>
                       );

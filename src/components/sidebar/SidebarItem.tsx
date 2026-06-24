@@ -22,9 +22,9 @@ export function SidebarItem({ item, collapsed, nested }: SidebarItemProps) {
           end
           className={({ isActive }) =>
             `flex items-center justify-center px-2 py-3 mx-2 rounded text-sm transition-colors ${
-              isActive
-                ? 'bg-blue-500/16 text-white'
-                : 'text-text-disabled hover:bg-surface-hover hover:text-blue-500'
+          isActive
+              ? 'bg-blue-500/16 text-white'
+              : 'text-text-tertiary-2 hover:bg-surface-hover hover:text-blue-500'
             }`
           }
         >
@@ -50,7 +50,7 @@ export function SidebarItem({ item, collapsed, nested }: SidebarItemProps) {
               ? nested
                 ? 'text-purple-500'
                 : 'bg-blue-500/16 text-text-primary'
-              : 'text-text-disabled hover:text-blue-500'
+              : 'text-text-tertiary-2 hover:text-blue-500'
           }`}
         >
           {!nested && isActive && (
