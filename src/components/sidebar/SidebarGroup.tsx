@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation, NavLink } from 'react-router-dom';
 import { SidebarTab } from '../ui/SidebarTab';
 import { SidebarItem } from './SidebarItem';
+import { LazyImage } from '../ui/LazyImage';
 import type { NavigationItem } from '../../types';
 
 interface SidebarGroupProps {
@@ -28,7 +29,7 @@ export function SidebarGroup({ item, collapsed }: SidebarGroupProps) {
               : 'text-text-disabled hover:bg-surface-hover hover:text-blue-500'
           }`}
         >
-          <img src={iconSrc} alt={item.label} className="h-5 w-5" />
+          <LazyImage src={iconSrc} alt={item.label} className="h-5 w-5" />
         </div>
         <div className="invisible group-hover:visible absolute left-full top-0 z-50 ml-3 min-w-[180px] rounded border border-border bg-bg-secondary py-1 shadow-lg">
           <div className="px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-text-tertiary pointer-events-none">

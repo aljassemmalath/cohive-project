@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useIsMobile } from '../../hooks/useMediaQuery';
+import { LazyImage } from '../../components/ui/LazyImage';
 import { Icon } from '../../components/ui/Icon';
 import { Button } from '../../components/ui/Button';
 import { TertiaryButton } from '../../components/ui/TertiaryButton';
@@ -82,7 +83,7 @@ function DesktopDashboard() {
                   <p className="text-sm text-text-disabled">Friday, May 16</p>
                 </div>
                 <Button variant="filled" color="dark" size="sm" className="gap-1.5">
-                  <img src="./svg/ai-stars.svg" alt="AI Stars" className="h-4 w-4" />
+                  <LazyImage src="./svg/ai-stars.svg" alt="AI Stars" className="h-4 w-4" />
                   Ask AI assistant
                 </Button>
               </div>

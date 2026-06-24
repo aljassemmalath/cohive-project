@@ -1,3 +1,5 @@
+import { LazyImage } from './LazyImage';
+
 interface SidebarTabProps {
   label: string;
   icon?: string;
@@ -24,7 +26,7 @@ export function SidebarTab({ label, icon, iconHover, iconActive, active, onClick
       {active && (
         <div className="absolute inset-y-1 left-0 w-[3px] rounded-r bg-gradient-to-b from-blue-500 to-purple-500" />
       )}
-      <img src={src} alt={label} className="h-5 w-5" />
+      <LazyImage src={src} alt={label} className="h-5 w-5" />
       <span>{label}</span>
     </button>
   );

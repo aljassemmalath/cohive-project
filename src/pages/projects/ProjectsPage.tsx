@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { TextField } from '../../components/ui/TextField';
 import { ProjectCard } from '../../components/projects/ProjectCard';
+import { LazyImage } from '../../components/ui/LazyImage';
 const summaryCards = [
   { label: 'Total Projects', value: '24', supporting: 'All projects', icon: './svg/folder-light-purple.svg', bg: 'purple' as const, bgImage: './images/purplebg.png' },
   { label: 'In Progress', value: '12', supporting: 'Active development', icon: './svg/activity-light-blue.svg', bg: 'blue' as const, bgImage: './images/bluebg.png' },
@@ -131,7 +132,7 @@ function SummaryCard({ label, value, supporting, icon, bg, bgImage }: typeof sum
           bg === 'success' ? 'bg-success-bg' :
           'bg-error-bg'
         }`}>
-          <img src={icon} alt="" className="h-5 w-5" />
+          <LazyImage src={icon} alt="" className="h-5 w-5" />
         </div>
         <div className="flex flex-col">
           <span className="text-sm text-text-secondary">{label}</span>

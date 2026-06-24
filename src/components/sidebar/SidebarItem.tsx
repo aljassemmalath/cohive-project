@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import type { NavigationItem } from '../../types';
+import { LazyImage } from '../ui/LazyImage';
 
 interface SidebarItemProps {
   item: NavigationItem;
@@ -28,7 +29,7 @@ export function SidebarItem({ item, collapsed, nested }: SidebarItemProps) {
           }
         >
           {({ isActive }) => (
-            <img src={getIcon(item, isActive)} alt={item.label} className="h-5 w-5" />
+            <LazyImage src={getIcon(item, isActive)} alt={item.label} className="h-5 w-5" />
           )}
         </NavLink>
         <div className="invisible group-hover:visible absolute left-full top-1/2 -translate-y-1/2 z-50 ml-3 whitespace-nowrap rounded-md bg-surface-2 px-3 py-1.5 text-xs text-white shadow-lg">
@@ -55,7 +56,7 @@ export function SidebarItem({ item, collapsed, nested }: SidebarItemProps) {
           {!nested && isActive && (
             <div className="absolute inset-y-1 left-0 w-[3px] rounded-r bg-gradient-to-b from-blue-500 to-purple-500" />
           )}
-          {!nested && <img src={getIcon(item, isActive)} alt={item.label} className="h-5 w-5" />}
+          {!nested && <LazyImage src={getIcon(item, isActive)} alt={item.label} className="h-5 w-5" />}
           <span>{item.label}</span>
         </div>
       )}

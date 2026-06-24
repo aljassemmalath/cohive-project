@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
+import { LazyImage } from '../../components/ui/LazyImage';
 import { Button } from '../../components/ui/Button';
 import { SecondaryButton } from '../../components/ui/ButtonPremium';
 
@@ -169,7 +170,7 @@ export default function ProjectDetailsPage() {
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-4">
             <div className="inline-flex shrink-0 items-center justify-center rounded-lg h-14 w-14 bg-purple-900">
-              <img src="./svg/folder-default.svg" alt="" className="h-7 w-7" />
+              <LazyImage src="./svg/folder-default.svg" alt="" className="h-7 w-7" />
             </div>
             <div className="flex flex-col gap-2">
               <h1 className="text-xl font-bold text-text-primary">{project.title}</h1>
