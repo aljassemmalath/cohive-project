@@ -4,6 +4,7 @@ import { Badge } from '../../components/ui/Badge';
 import { PrimaryButton, SecondaryButton, IconToggleButton } from '../../components/ui/ButtonPremium';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { Dropdown } from '../../components/ui/Dropdown';
+import { SimpleModal, LeftIconModal } from '../../components/ui/Modal';
 
 type ButtonColor = 'purple' | 'blue' | 'cyan' | 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'dark';
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -382,6 +383,72 @@ export default function ComponentsPage() {
         <p className="mb-4 text-sm text-text-tertiary">Reusable dropdown menu with click-outside-close and selected state.</p>
         <DropdownDemo />
       </Section>
+
+      <Section title="Simple Modal (Centered Icon)">
+        <p className="mb-4 text-sm text-text-tertiary">Centered icon layout for confirmations and alerts. Available in 5 color variants.</p>
+        <SimpleModalDemo />
+      </Section>
+
+      <Section title="Left Icon Modal (Icon Left + Close Button)">
+        <p className="mb-4 text-sm text-text-tertiary">Left-aligned icon with X close button at the top right. Available in 5 color variants.</p>
+        <LeftIconModalDemo />
+      </Section>
+    </div>
+  );
+}
+
+const modalVariants = ['success', 'warning', 'error', 'info', 'neutral'] as const;
+
+function SimpleModalDemo() {
+  const [open, setOpen] = useState<typeof modalVariants[number] | null>(null);
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      {modalVariants.map((v) => (
+        <Button key={v} variant="outline" color={v === 'neutral' ? 'neutral' : v} size="sm" onClick={() => setOpen(v)}>
+          {v.charAt(0).toUpperCase() + v.slice(1)}
+        </Button>
+      ))}
+      <SimpleModal
+        isOpen={open !== null}
+        onClose={() => setOpen(null)}
+        variant={open || 'neutral'}
+        icon={
+          <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        }
+        title="Are you sure?"
+        description="This action cannot be undone. The changes will be permanent."
+        primaryLabel="Confirm"
+        secondaryLabel="Cancel"
+      />
+    </div>
+  );
+}
+
+function LeftIconModalDemo() {
+  const [open, setOpen] = useState<typeof modalVariants[number] | null>(null);
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      {modalVariants.map((v) => (
+        <Button key={v} variant="outline" color={v === 'neutral' ? 'neutral' : v} size="sm" onClick={() => setOpen(v)}>
+          {v.charAt(0).toUpperCase() + v.slice(1)}
+        </Button>
+      ))}
+      <LeftIconModal
+        isOpen={open !== null}
+        onClose={() => setOpen(null)}
+        variant={open || 'neutral'}
+        icon={
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        }
+        title="Information"
+        description="This is an informational message with more context about what happened."
+        primaryLabel="Got it"
+        secondaryLabel="Learn more"
+      />
     </div>
   );
 }
