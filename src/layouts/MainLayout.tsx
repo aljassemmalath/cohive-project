@@ -79,7 +79,7 @@ export function MainLayout() {
           <div className="absolute inset-0 bg-black/60" onClick={() => setMobileMenuOpen(false)} />
           <div className="absolute left-0 top-0 bottom-0 w-72 bg-bg-secondary border-r border-border overflow-y-auto">
             <div className="flex h-14 items-center border-b border-border px-4">
-              <img src="/svg/logo.svg" alt="COHIVE" className="h-7" />
+              <img src="./svg/logo.svg" alt="COHIVE" className="h-7" />
             </div>
             <nav className="py-4">
               {filteredSections.map((section) => (

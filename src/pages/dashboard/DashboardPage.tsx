@@ -82,7 +82,7 @@ function DesktopDashboard() {
                   <p className="text-sm text-text-disabled">Friday, May 16</p>
                 </div>
                 <Button variant="filled" color="dark" size="sm" className="gap-1.5">
-                  <img src="/svg/ai-stars.svg" alt="AI Stars" className="h-4 w-4" />
+                  <img src="./svg/ai-stars.svg" alt="AI Stars" className="h-4 w-4" />
                   Ask AI assistant
                 </Button>
               </div>
@@ -125,7 +125,7 @@ function DesktopDashboard() {
             </div>
           </Card>
           <div className="grid grid-cols-2 gap-6">
-            <MainCard title="My Priority Tasks" actionLabel="View all" icon="/svg/tasks.svg">
+            <MainCard title="My Priority Tasks" actionLabel="View all" icon="./svg/tasks.svg">
               <div className="flex flex-col gap-4">
                 <DesktopPriorityItem
                   title="Redesign dashboard UI"
@@ -170,7 +170,7 @@ function DesktopDashboard() {
           </div>
         </div>
         <div className="flex w-[35%] flex-col gap-6">
-          <MainCard title="Upcoming Deadlines" actionLabel="View all" icon="/svg/calendar-lightblue.svg">
+          <MainCard title="Upcoming Deadlines" actionLabel="View all" icon="./svg/calendar-lightblue.svg">
             <div className="flex flex-col gap-4">
               <DesktopDeadlineItem
                 date="May 16"
@@ -187,7 +187,7 @@ function DesktopDashboard() {
               />
             </div>
           </MainCard>
-          <MainCard title="Pending approvals" actionLabel="View all" icon="/svg/pending-approval.svg">
+          <MainCard title="Pending approvals" actionLabel="View all" icon="./svg/pending-approval.svg">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <HorizontalListItem
@@ -206,7 +206,7 @@ function DesktopDashboard() {
               </div>
             </div>
           </MainCard>
-          <MainCard title="Recent activity" actionLabel="View all" icon="/svg/square-chart.svg">
+          <MainCard title="Recent activity" actionLabel="View all" icon="./svg/square-chart.svg">
             <div className="flex flex-col gap-4">
               <HorizontalListItem
                 title="Ahmad Hassan completed 3 tasks in COHIVE redesign"

@@ -3,10 +3,10 @@ import { Card } from '../../components/ui/Card';
 import { TextField } from '../../components/ui/TextField';
 import { ProjectCard } from '../../components/projects/ProjectCard';
 const summaryCards = [
-  { label: 'Total Projects', value: '24', supporting: 'All projects', icon: '/svg/folder-light-purple.svg', bg: 'purple' as const, bgImage: '/images/purplebg.png' },
-  { label: 'In Progress', value: '12', supporting: 'Active development', icon: '/svg/activity-light-blue.svg', bg: 'blue' as const, bgImage: '/images/bluebg.png' },
-  { label: 'At Risk', value: '3', supporting: 'Needs attention', icon: '/svg/alert-light-yellow.svg', bg: 'error' as const, bgImage: '/images/orangebg.png' },
-  { label: 'Completed', value: '8', supporting: 'This quarter', icon: '/svg/circle-check-light-green.svg', bg: 'success' as const, bgImage: '/images/greenbg.png' },
+  { label: 'Total Projects', value: '24', supporting: 'All projects', icon: './svg/folder-light-purple.svg', bg: 'purple' as const, bgImage: './images/purplebg.png' },
+  { label: 'In Progress', value: '12', supporting: 'Active development', icon: './svg/activity-light-blue.svg', bg: 'blue' as const, bgImage: './images/bluebg.png' },
+  { label: 'At Risk', value: '3', supporting: 'Needs attention', icon: './svg/alert-light-yellow.svg', bg: 'error' as const, bgImage: './images/orangebg.png' },
+  { label: 'Completed', value: '8', supporting: 'This quarter', icon: './svg/circle-check-light-green.svg', bg: 'success' as const, bgImage: './images/greenbg.png' },
 ];
 
 const projects = [
