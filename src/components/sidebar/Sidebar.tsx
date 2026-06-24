@@ -2,7 +2,7 @@ import { navigationConfig } from '../../config/navigation.config';
 import { useAuth } from '../../auth/hooks/useAuth';
 import { canAccess } from '../../auth/utils/permissions';
 import { SidebarSection } from './SidebarSection';
-import logo from '../../assets/svg/Logo.svg';
+import logo from '../../assets/svg/logo.svg';
 
 interface SidebarProps {
   collapsed: boolean;
