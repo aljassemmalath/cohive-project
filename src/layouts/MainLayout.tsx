@@ -5,6 +5,7 @@ import { Header } from '../components/header/Header';
 import { navigationConfig } from '../config/navigation.config';
 import { useAuth } from '../auth/hooks/useAuth';
 import { canAccess } from '../auth/utils/permissions';
+import { useIsDesktop } from '../hooks/useMediaQuery';
 
 function filterItems(user: ReturnType<typeof useAuth>['user']) {
   return (item: { roles?: string[]; permissions?: string[] }) => {
@@ -20,6 +21,7 @@ export function MainLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user } = useAuth();
   const location = useLocation();
+  const isDesktop = useIsDesktop();
 
   const filteredSections = navigationConfig
     .map((section) => ({
@@ -48,16 +50,14 @@ export function MainLayout() {
 
   return (
     <div className="flex h-screen bg-[#000614]">
-      <div className="hidden lg:flex">
-        <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((p) => !p)} />
-      </div>
+      {isDesktop && <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((p) => !p)} />}
       <div className="flex flex-1 flex-col min-w-0">
         <Header onMenuToggle={() => setMobileMenuOpen((p) => !p)} />
         <main className="flex-1 overflow-auto lg:p-6">
           <Outlet />
         </main>
       </div>
-      <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-14 items-center border-t border-border bg-bg-secondary lg:hidden">
+      {!isDesktop && <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-14 items-center border-t border-border bg-bg-secondary">
         {bottomNavItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
@@ -73,9 +73,9 @@ export function MainLayout() {
             </Link>
           );
         })}
-      </nav>
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden">
+      </nav>}
+      {mobileMenuOpen && !isDesktop && (
+        <div className="fixed inset-0 z-40">
           <div className="absolute inset-0 bg-black/60" onClick={() => setMobileMenuOpen(false)} />
           <div className="absolute left-0 top-0 bottom-0 w-72 bg-bg-secondary border-r border-border overflow-y-auto">
             <div className="flex h-14 items-center border-b border-border px-4">

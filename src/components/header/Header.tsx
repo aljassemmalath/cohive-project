@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/hooks/useAuth';
+import { useIsDesktop } from '../../hooks/useMediaQuery';
 import { TextField } from '../../components/ui/TextField';
 import { PrimaryButton } from '../ui/ButtonPremium';
 import { Breadcrumb } from '../ui/Breadcrumb';
@@ -91,22 +92,23 @@ export function Header({ onMenuToggle }: HeaderProps) {
   const { user } = useAuth();
   const location = useLocation();
   const crumbs = getBreadcrumbs(location.pathname);
+  const isDesktop = useIsDesktop();
 
   return (
     <header className="grid grid-cols-3 items-center h-14 lg:h-16 border-b border-border bg-bg-secondary px-4 lg:px-6">
       <div className="flex items-center gap-3 min-w-0">
-        <button
+        {!isDesktop && <button
           onClick={onMenuToggle}
-          className="lg:hidden h-10 w-10 shrink-0 flex items-center justify-center rounded text-text-tertiary hover:text-text-primary hover:bg-surface-2 transition-colors"
+          className="h-10 w-10 shrink-0 flex items-center justify-center rounded text-text-tertiary hover:text-text-primary hover:bg-surface-2 transition-colors"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
-        </button>
+        </button>}
         <Breadcrumb items={crumbs} />
       </div>
-      <div className="flex justify-center">
-        <div className="hidden lg:block w-full max-w-md">
+      {isDesktop && <div className="flex justify-center">
+        <div className="w-full max-w-md">
           <TextField
             placeholder="Search projects, tasks, people..."
             iconLeft={
@@ -116,7 +118,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
             }
           />
         </div>
-      </div>
+      </div>}
       <div className="flex items-center justify-end gap-3 lg:gap-4">
         <PrimaryButton
           iconRight={
@@ -136,10 +138,10 @@ export function Header({ onMenuToggle }: HeaderProps) {
           <div className="flex h-8 w-8 lg:h-9 lg:w-9 items-center justify-center rounded-full bg-purple-900 text-xs lg:text-sm font-medium text-purple-300">
             {user ? user.name.split(' ').map(n => n[0]).join('') : '??'}
           </div>
-          <div className="hidden lg:flex flex-col">
+          {isDesktop && <div className="flex flex-col">
             <span className="text-sm font-medium text-text-primary">{user?.name ?? 'User'}</span>
             <span className="text-xs text-text-disabled">Team Lead</span>
-          </div>
+          </div>}
         </div>
       </div>
     </header>

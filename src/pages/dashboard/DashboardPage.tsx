@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useIsMobile } from '../../hooks/useMediaQuery';
 import { Icon } from '../../components/ui/Icon';
 import { Button } from '../../components/ui/Button';
 import { TertiaryButton } from '../../components/ui/TertiaryButton';
@@ -508,14 +509,6 @@ function MobileDashboard() {
 // ── Main export ─────────────────────────────────────────────
 
 export default function DashboardPage() {
-  return (
-    <>
-      <div className="lg:hidden">
-        <MobileDashboard />
-      </div>
-      <div className="hidden lg:block">
-        <DesktopDashboard />
-      </div>
-    </>
-  );
+  const isMobile = useIsMobile();
+  return isMobile ? <MobileDashboard /> : <DesktopDashboard />;
 }
