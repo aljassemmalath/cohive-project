@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -107,39 +107,46 @@ const projects = {
   },
 };
 
-function CircularProgress({ percentage }: { percentage: number }) {
-  const r = 48;
-  const circumference = 2 * Math.PI * r;
-  const offset = circumference * (1 - percentage / 100);
+function MultiSegmentDonut({ completed, inProgress, blocked }: { completed: number; inProgress: number; blocked: number }) {
+  const r = 52;
+  const circum = 2 * Math.PI * r;
+  const half = 68;
+  const segments = [
+    { label: 'In Progress', value: inProgress, color: 'text-blue-500', bg: 'bg-blue-500' },
+    { label: 'Completed', value: completed, color: 'text-cyan-500', bg: 'bg-cyan-500' },
+    { label: 'Blocked', value: blocked, color: 'text-error-main', bg: 'bg-error-main' },
+  ];
+  const totalT = segments.reduce((s, seg) => s + seg.value, 0);
+  let cumulative = 0;
   return (
     <div className="relative inline-flex items-center justify-center group">
       <svg className="-rotate-90" width="136" height="136" viewBox="0 0 136 136">
-        <circle cx="68" cy="68" r={r} fill="none" stroke="currentColor" strokeWidth="10" className="text-surface-2" />
-        <circle
-          cx="68" cy="68" r={r}
-          fill="none" stroke="currentColor" strokeWidth="10"
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          className="text-blue-500"
-        />
+        <circle cx={half} cy={half} r={r} fill="none" stroke="currentColor" strokeWidth="14" className="text-surface-2" />
+        {segments.map((seg) => {
+          const ratio = totalT > 0 ? seg.value / totalT : 0;
+          const dashLen = circum * ratio;
+          const offset = -cumulative * circum;
+          cumulative += ratio;
+          return (
+            <circle
+              key={seg.label}
+              cx={half} cy={half} r={r}
+              fill="none" stroke="currentColor" strokeWidth="14"
+              strokeLinecap="butt"
+              strokeDasharray={`${dashLen} ${circum}`}
+              strokeDashoffset={offset}
+              className={seg.color}
+            />
+          );
+        })}
       </svg>
-      <span className="absolute text-xl font-bold text-text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200">{percentage}%</span>
+      <div className="absolute flex flex-col items-center">
+        <span className="text-2xl font-bold text-text-primary">{totalT > 0 ? Math.round(completed / totalT * 100) : 0}%</span>
+        <span className="text-xs text-text-tertiary mt-0.5">Completed</span>
+      </div>
     </div>
   );
 }
-
-const statusIconMap: Record<string, ReactNode> = {
-  danger: (
-    <div className="h-2 w-2 rounded-full bg-error-main shrink-0" />
-  ),
-  warning: (
-    <div className="h-2 w-2 rounded-full bg-warning-main shrink-0" />
-  ),
-  info: (
-    <div className="h-2 w-2 rounded-full bg-info-main shrink-0" />
-  ),
-};
 
 export default function ProjectDetailsPage() {
   const { projectId = '' } = useParams();
@@ -246,21 +253,21 @@ export default function ProjectDetailsPage() {
       <div className="grid grid-cols-3 gap-5">
         <Card className="p-5 flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-text-primary">Tasks on board</h3>
-            <span className="text-xs text-text-tertiary bg-surface-2 px-2 py-0.5 rounded cursor-default" title="Total tasks across all columns">{project.totalTasks} total</span>
+            <h3 className="text-sm font-semibold text-text-primary">Progress Summary</h3>
+            <span className="text-xs text-text-tertiary bg-surface-2 px-2 py-0.5 rounded" title="Total tasks on board">{project.totalTasks} total</span>
           </div>
           <div className="flex items-center gap-6">
-            <CircularProgress percentage={project.progress} />
+            <MultiSegmentDonut completed={project.completedTasks} inProgress={project.inProgressTasks} blocked={project.blockedTasks} />
             <div className="flex flex-col gap-3">
               {[
-                { label: 'Completed', count: project.completedTasks, percent: Math.round(project.completedTasks / project.totalTasks * 100), color: 'text-success-main' },
-                { label: 'In Progress', count: project.inProgressTasks, percent: Math.round(project.inProgressTasks / project.totalTasks * 100), color: 'text-blue-500' },
+                { label: 'In Progress', count: project.inProgressTasks, color: 'bg-blue-500' },
+                { label: 'Completed', count: project.completedTasks, color: 'bg-cyan-500' },
+                { label: 'Blocked', count: project.blockedTasks, color: 'bg-error-main' },
               ].map((row) => (
                 <div key={row.label} className="flex items-center gap-3">
-                  <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${row.color.replace('text-', 'bg-')}`} />
-                  <span className="w-20 text-sm text-text-secondary">{row.label}</span>
-                  <span className="w-6 text-sm font-medium text-text-primary text-right">{row.count}</span>
-                  <span className="w-8 text-xs text-text-disabled text-right">{row.percent}%</span>
+                  <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${row.color}`} />
+                  <span className="w-24 text-sm text-text-secondary">{row.label}</span>
+                  <span className="text-xs font-semibold text-text-primary bg-surface-2 px-2 py-0.5 rounded min-w-[28px] text-center">{row.count}</span>
                 </div>
               ))}
             </div>
@@ -274,13 +281,16 @@ export default function ProjectDetailsPage() {
           <p className="text-sm text-text-secondary">Project is progressing well with minor risks identified and being addressed.</p>
           <div className="h-px bg-border" />
           <div className="flex flex-col gap-3">
-            {project.issues.map((issue) => (
-              <div key={issue.label} className="flex items-center gap-3">
-                {statusIconMap[issue.icon]}
-                <span className="flex-1 text-sm text-text-secondary">{issue.label}</span>
-                <span className="text-sm font-medium text-text-primary">{issue.number}</span>
-              </div>
-            ))}
+            <div className="flex items-center gap-3">
+              <div className="h-2.5 w-2.5 rounded-full bg-error-main shrink-0" />
+              <span className="flex-1 text-sm text-text-secondary">Blocked</span>
+              <span className="text-sm font-semibold text-text-primary">{project.blockedTasks}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="h-2.5 w-2.5 rounded-full bg-warning-main shrink-0" />
+              <span className="flex-1 text-sm text-text-secondary">Risk</span>
+              <span className="text-sm font-semibold text-text-primary">{project.issues.find(i => i.icon === 'warning')?.number || 0}</span>
+            </div>
           </div>
           <button className="self-start text-xs font-medium text-purple-400 hover:text-purple-300 transition-colors">
             View detailed health report
@@ -296,21 +306,28 @@ export default function ProjectDetailsPage() {
               <thead>
                 <tr className="text-xs text-text-disabled border-b border-border">
                   <th className="text-left font-medium pb-2">Milestone</th>
-                  <th className="text-left font-medium pb-2">Planned</th>
-                  <th className="text-left font-medium pb-2">Projected</th>
                   <th className="text-left font-medium pb-2">Delay</th>
+                  <th className="text-right font-medium pb-2">Details</th>
                 </tr>
               </thead>
               <tbody>
                 {project.milestones.map((m) => (
                   <tr key={m.name} className="border-b border-border/50 last:border-b-0">
                     <td className="py-2.5 text-text-primary">{m.name}</td>
-                    <td className="py-2.5 text-text-secondary">{m.planned}</td>
-                    <td className="py-2.5 text-text-secondary">{m.projected}</td>
                     <td className="py-2.5">
-                      <span className={`text-xs font-medium ${m.status === 'on-track' ? 'text-success-main' : 'text-warning-main'}`}>
+                      <span className={`text-xs font-medium ${
+                        m.status === 'on-track' ? 'text-success-main' : 
+                        m.delay.startsWith('1') ? 'text-error-main' : 'text-warning-main'
+                      }`}>
                         {m.delay}
                       </span>
+                    </td>
+                    <td className="py-2.5 text-right">
+                      <button className="text-text-disabled hover:text-text-primary transition-colors">
+                        <svg className="h-4 w-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -330,22 +347,29 @@ export default function ProjectDetailsPage() {
               <thead>
                 <tr className="text-xs text-text-disabled border-b border-border">
                   <th className="text-left font-medium pb-2">Blocker</th>
-                  <th className="text-left font-medium pb-2">Task</th>
-                  <th className="text-left font-medium pb-2">Blocked</th>
-                  <th className="text-left font-medium pb-2">Affected</th>
-                  <th className="text-left font-medium pb-2">Next step</th>
+                  <th className="text-left font-medium pb-2">Delay</th>
+                  <th className="text-right font-medium pb-2">Details</th>
                 </tr>
               </thead>
               <tbody>
-                {project.blockers.map((b) => (
-                  <tr key={b.blocker} className="border-b border-border/50 last:border-b-0">
-                    <td className="py-2.5 pr-2 text-text-primary whitespace-nowrap">{b.blocker}</td>
-                    <td className="py-2.5 pr-2 text-text-secondary whitespace-nowrap">{b.task}</td>
-                    <td className="py-2.5 pr-2 text-text-secondary whitespace-nowrap">{b.blocked}</td>
-                    <td className="py-2.5 pr-2 text-text-secondary whitespace-nowrap">{b.affected}</td>
-                    <td className="py-2.5 text-text-tertiary whitespace-nowrap">{b.nextStep}</td>
-                  </tr>
-                ))}
+                {project.blockers.map((b) => {
+                  const days = parseInt(b.blocked);
+                  return (
+                    <tr key={b.blocker} className="border-b border-border/50 last:border-b-0">
+                      <td className="py-2.5 pr-2 text-text-primary whitespace-nowrap">{b.blocker}</td>
+                      <td className="py-2.5">
+                        <span className={`text-xs font-medium ${days >= 5 ? 'text-error-main' : 'text-warning-main'}`}>{b.blocked}</span>
+                      </td>
+                      <td className="py-2.5 text-right">
+                        <button className="text-text-disabled hover:text-text-primary transition-colors">
+                          <svg className="h-4 w-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -367,9 +391,9 @@ export default function ProjectDetailsPage() {
                   <p className="text-sm font-medium text-text-primary truncate">{d.title}</p>
                   <p className="text-xs text-text-disabled">{d.metadata}</p>
                 </div>
-                <button className="text-text-disabled hover:text-text-primary transition-colors shrink-0">
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01" />
+                <button className="text-text-tertiary hover:text-text-primary transition-colors shrink-0">
+                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="5" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="12" cy="19" r="1.5" />
                   </svg>
                 </button>
               </div>
@@ -378,7 +402,7 @@ export default function ProjectDetailsPage() {
         </Card>
         <Card className="p-5 flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-text-primary">Team Roster</h3>
+            <h3 className="text-sm font-semibold text-text-primary">Team Members</h3>
             <button className="text-xs font-medium text-purple-400 hover:text-purple-300 transition-colors">Manage team</button>
           </div>
           <div className="overflow-x-auto">
@@ -388,6 +412,7 @@ export default function ProjectDetailsPage() {
                   <th className="text-left font-medium pb-2">Member</th>
                   <th className="text-left font-medium pb-2">Role</th>
                   <th className="text-right font-medium pb-2">Tasks</th>
+                  <th className="text-right font-medium pb-2" />
                 </tr>
               </thead>
               <tbody>
@@ -405,7 +430,14 @@ export default function ProjectDetailsPage() {
                       <span className="text-xs text-text-secondary">{m.role}</span>
                     </td>
                     <td className="py-2.5 text-right">
-                      <span className="text-sm font-medium text-text-primary">{m.tasks}</span>
+                      <span className="text-xs font-semibold text-text-primary bg-surface-2 px-1.5 py-0.5 rounded min-w-[22px] inline-block text-center">{m.tasks}</span>
+                    </td>
+                    <td className="py-2.5 text-right">
+                      <button className="text-text-disabled hover:text-text-primary transition-colors">
+                        <svg className="h-4 w-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01" />
+                        </svg>
+                      </button>
                     </td>
                   </tr>
                 ))}
