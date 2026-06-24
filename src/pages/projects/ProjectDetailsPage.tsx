@@ -108,23 +108,23 @@ const projects = {
 };
 
 function CircularProgress({ percentage }: { percentage: number }) {
-  const r = 36;
+  const r = 48;
   const circumference = 2 * Math.PI * r;
   const offset = circumference * (1 - percentage / 100);
   return (
-    <div className="relative inline-flex items-center justify-center">
-      <svg className="-rotate-90" width="96" height="96" viewBox="0 0 96 96">
-        <circle cx="48" cy="48" r={r} fill="none" stroke="currentColor" strokeWidth="6" className="text-surface-2" />
+    <div className="relative inline-flex items-center justify-center group">
+      <svg className="-rotate-90" width="136" height="136" viewBox="0 0 136 136">
+        <circle cx="68" cy="68" r={r} fill="none" stroke="currentColor" strokeWidth="10" className="text-surface-2" />
         <circle
-          cx="48" cy="48" r={r}
-          fill="none" stroke="currentColor" strokeWidth="6"
+          cx="68" cy="68" r={r}
+          fill="none" stroke="currentColor" strokeWidth="10"
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           className="text-blue-500"
         />
       </svg>
-      <span className="absolute text-lg font-bold text-text-primary">{percentage}%</span>
+      <span className="absolute text-xl font-bold text-text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200">{percentage}%</span>
     </div>
   );
 }
@@ -244,28 +244,25 @@ export default function ProjectDetailsPage() {
       </div>
       {activeTab === 'Overview' && (<>
       <div className="grid grid-cols-3 gap-5">
-        <Card className="p-5">
+        <Card className="p-5 flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-text-primary">Tasks on board</h3>
+            <span className="text-xs text-text-tertiary bg-surface-2 px-2 py-0.5 rounded cursor-default" title="Total tasks across all columns">{project.totalTasks} total</span>
+          </div>
           <div className="flex items-center gap-6">
             <CircularProgress percentage={project.progress} />
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col gap-3">
               {[
                 { label: 'Completed', count: project.completedTasks, percent: Math.round(project.completedTasks / project.totalTasks * 100), color: 'text-success-main' },
                 { label: 'In Progress', count: project.inProgressTasks, percent: Math.round(project.inProgressTasks / project.totalTasks * 100), color: 'text-blue-500' },
-                { label: 'Pending', count: project.pendingTasks, percent: Math.round(project.pendingTasks / project.totalTasks * 100), color: 'text-text-tertiary' },
-                { label: 'Blocked', count: project.blockedTasks, percent: Math.round(project.blockedTasks / project.totalTasks * 100), color: 'text-error-main' },
               ].map((row) => (
                 <div key={row.label} className="flex items-center gap-3">
-                  <div className={`h-2 w-2 rounded-full shrink-0 ${row.color.replace('text-', 'bg-')}`} />
-                  <span className="w-20 text-xs text-text-secondary">{row.label}</span>
-                  <span className="w-6 text-xs font-medium text-text-primary text-right">{row.count}</span>
-                  <span className="w-8 text-[11px] text-text-disabled text-right">{row.percent}%</span>
+                  <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${row.color.replace('text-', 'bg-')}`} />
+                  <span className="w-20 text-sm text-text-secondary">{row.label}</span>
+                  <span className="w-6 text-sm font-medium text-text-primary text-right">{row.count}</span>
+                  <span className="w-8 text-xs text-text-disabled text-right">{row.percent}%</span>
                 </div>
               ))}
-              <div className="flex items-center gap-3 pt-1.5 border-t border-border">
-                <div className="h-2 w-2 rounded-full bg-text-disabled shrink-0" />
-                <span className="w-20 text-xs font-medium text-text-primary">Total tasks</span>
-                <span className="w-6 text-xs font-medium text-text-primary text-right">{project.totalTasks}</span>
-              </div>
             </div>
           </div>
         </Card>
